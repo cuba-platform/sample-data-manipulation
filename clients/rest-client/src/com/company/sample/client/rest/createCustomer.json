@@ -1,0 +1,10 @@
+{
+  "commitInstances": [
+    {
+      "id": "NEW-sample$Customer",
+      "name": "Arthur Dent",
+      "email": "arthur.dent@mail.com",
+      "grade": "10"
+    }
+  ]
+}

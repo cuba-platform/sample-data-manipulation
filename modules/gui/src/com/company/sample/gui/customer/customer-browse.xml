@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="com.company.sample.gui.customer.CustomerBrowse"
+        focusComponent="customersTable"
+        lookupComponent="customersTable"
+        messagesPack="com.company.sample.gui.customer">
+    <dsContext>
+        <collectionDatasource id="customersDs"
+                              class="com.company.sample.entity.Customer"
+                              view="_local">
+            <query>
+                <![CDATA[select e from sample$Customer e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <layout expand="customersTable"
+            spacing="true">
+        <table id="customersTable"
+               width="100%">
+            <actions>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="email"/>
+                <column id="grade"/>
+            </columns>
+            <rows datasource="customersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="refreshBtn"
+                        action="customersTable.refresh"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>
