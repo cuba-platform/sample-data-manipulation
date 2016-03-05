@@ -1,6 +1,6 @@
 # Data Manipulation
 
-This example project outlines various ways of programmatic data manipulation:
+This example project outlines various ways of programmatic data manipulation in [CUBA](https://www.cuba-platform.com) applications:
 
 - Programmatic creation of an entity in a middleware service. See the `CustomerServiceBean` class.
 
