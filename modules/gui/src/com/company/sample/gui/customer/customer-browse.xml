@@ -10,12 +10,35 @@
                               class="com.company.sample.entity.Customer"
                               view="_local">
             <query>
-                <![CDATA[select e from sample$Customer e]]>
+                <![CDATA[select e from sample$Customer e
+order by e.name]]>
             </query>
         </collectionDatasource>
     </dsContext>
     <layout expand="customersTable"
             spacing="true">
+        <hbox id="fieldsBox"
+              spacing="true">
+            <textField id="nameField"
+                       inputPrompt="Name"/>
+            <textField id="emailField"
+                       inputPrompt="Email"/>
+            <lookupField id="gradeField"
+                         inputPrompt="Grade"/>
+            <popupButton caption="Submit">
+                <actions>
+                    <action id="createInService"
+                            caption="To Service"
+                            invoke="onCreateInService"/>
+                    <action id="createInController"
+                            caption="To Controller"
+                            invoke="onCreateInController"/>
+                </actions>
+            </popupButton>
+            <button id="cancelBtn"
+                    caption="Cancel"
+                    invoke="onCancelBtnClick"/>
+        </hbox>
         <table id="customersTable"
                width="100%">
             <actions>
@@ -30,6 +53,12 @@
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
+                <button id="createBtn"
+                        caption="Create or Update"
+                        invoke="onCreateBtnClick"/>
+                <button id="deleteAllBtn"
+                        caption="Delete All"
+                        invoke="onDeleteAllBtnClick"/>
                 <button id="refreshBtn"
                         action="customersTable.refresh"/>
             </buttonsPanel>
