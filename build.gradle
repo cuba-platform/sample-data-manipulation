@@ -1,7 +1,7 @@
 
 
 buildscript {
-    ext.cubaVersion = '6.0.9'
+    ext.cubaVersion = '6.1.0'
     repositories {
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
@@ -199,7 +199,7 @@ configure(webModule) {
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
         appName = 'app'
         appJars('cuba-client', 'cuba-gui', 'cuba-web', 'cuba-global', 
-                'app-global', 'app-gui', 'app-web')
+                'app-global', 'app-gui', 'app-web', 'cuba-rest-api')
     }
 }
 
@@ -222,7 +222,7 @@ configure(portalModule) {
     task deploy(dependsOn: assemble, type: CubaDeployment) {
         appName = webappName
         appJars('cuba-client', 'cuba-portal', 'cuba-global', 
-                'app-global', 'app-portal')
+                'app-global', 'app-portal', 'cuba-rest-api')
     }
 
     task deployStatic() << {

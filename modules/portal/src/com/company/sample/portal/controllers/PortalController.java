@@ -21,12 +21,12 @@ import javax.inject.Inject;
 public class PortalController {
 
     @Inject
-    protected DataService dataService;
+    private DataService dataService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(Model model) {
         if (PortalSessionProvider.getUserSession().isAuthenticated()) {
-            LoadContext l = new LoadContext(User.class);
+            LoadContext<User> l = LoadContext.create(User.class);
             l.setQueryString("select u from sec$User u");
             model.addAttribute("users", dataService.loadList(l));
         }
