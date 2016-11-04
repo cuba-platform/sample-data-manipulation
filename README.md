@@ -10,8 +10,8 @@ This example project outlines various ways of programmatic data manipulation in 
     - `calculateDiscountInService()` - delegeates to a middleware [service](https://github.com/cuba-platform/sample-data-manipulation/blob/master/modules/core/src/com/company/sample/service/CustomerServiceBean.java) method.
     - `calculateDiscountInScreen()` - executes query in the screen controller via [DataManager](https://doc.cuba-platform.com/manual-6.3/dataManager.html).
 
-- Using the REST API to control the application from an external tool. See the project in the `clients/rest-client` directory. To create IntelliJ IDEA project files, open the command line in this directory and run `gradle idea`.
-    - The `RestClient.createCustomer()` method creates an entity by sending JSON to the standard REST API method `commit`.
-    - The `RestClient.createCustomerViaService()` method creates an entity by sending its attributes to the application service.
+- Using the [REST API](https://doc.cuba-platform.com/manual-6.3/rest_api_v2.html) to control the application from an external tool. See the project in the `clients/rest-client` directory. To create IntelliJ IDEA project files, open the command line in this directory and run `gradle idea`.
+    - The `RestClient.createCustomer()` method creates an entity by sending JSON to the standard REST API CRUD method.
+    - The `RestClient.createCustomerViaService()` method creates an entity by sending its attributes to the middleware service.
 
 Based on CUBA Platform 6.3.2

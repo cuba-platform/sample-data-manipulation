@@ -2,26 +2,31 @@ package com.company.sample.client.rest;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 public class RestClient {
 
     public static final String ENC = "UTF-8";
 
-    private String sessionId;
+    private String accessToken;
 
     public static void main(String[] args) {
         RestClient client = new RestClient();
@@ -36,70 +41,78 @@ public class RestClient {
     }
 
     /**
-     * Logs in with a user name and password and saves the session id for subsequent REST API invocations.
+     * Logs in with a user name and password and saves the access token for subsequent REST API invocations.
      */
     private void login() throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String user = "admin";
-            String password = "admin";
-            HttpGet httpGet = new HttpGet("http://localhost:8080/app-portal/api/login?u=" + user + "&p=" + password);
+            HttpPost post = new HttpPost("http://localhost:8080/app/rest/v2/oauth/token");
 
-            System.out.println("Executing request " + httpGet.getRequestLine());
+            // see cuba.rest.client.id and cuba.rest.client.secret application properties
+            String credentials = Base64.getEncoder().encodeToString("client:secret".getBytes(ENC));
+            post.setHeader("Authorization", "Basic " + credentials);
 
-            sessionId = httpclient.execute(httpGet, new StringResponseHandler());
-            System.out.println("Logged in, session id: " + sessionId);
+            // user credentials
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("grant_type", "password"));
+            params.add(new BasicNameValuePair("username", "admin"));
+            params.add(new BasicNameValuePair("password", "admin"));
+            post.setEntity(new UrlEncodedFormEntity(params));
+
+            System.out.println("Executing request " + post.getRequestLine());
+
+            String json = httpclient.execute(post, new StringResponseHandler());
+            JSONObject jsonObject = new JSONObject(json);
+            accessToken = jsonObject.getString("access_token");
+
+            System.out.println("Logged in, session id: " + accessToken);
         }
     }
 
     /**
-     * Creates a Customer by sending JSON to the standard REST API method "commit".
+     * Creates a Customer by sending JSON to the standard REST API CRUD method.
      */
     private void createCustomer() throws IOException {
-        String json = readResource("/com/company/sample/client/rest/createCustomer.json");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "Arthur Dent");
+        jsonObject.put("email", "arthur.dent@mail.com");
+        jsonObject.put("grade", "GOLD");
+        String json = jsonObject.toString();
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            HttpPost httpPost = new HttpPost("http://localhost:8080/app-portal/api/commit?s=" + sessionId);
+            HttpPost post = new HttpPost("http://localhost:8080/app/rest/v2/entities/sample$Customer");
+            post.setHeader("Authorization", "Bearer " + accessToken);
+
             StringEntity stringEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
-            httpPost.setEntity(stringEntity);
+            post.setEntity(stringEntity);
 
-            System.out.println("Executing request " + httpPost.getRequestLine());
+            System.out.println("Executing request " + post.getRequestLine());
 
-            String response = httpclient.execute(httpPost, new StringResponseHandler());
+            String response = httpclient.execute(post, new StringResponseHandler());
+
             System.out.println("Created Customer: " + response);
         }
     }
 
     /**
-     * Creates a Customer by sending its attributes to the "sample_CustomerService" application service.
+     * Creates a Customer by sending its attributes to the "sample_CustomerService" middleware service.
      */
     private void createCustomerViaService() throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String customerName = URLEncoder.encode("Ford Prefect", ENC);
             String customerEmail = URLEncoder.encode("ford.prefect@mail.com", ENC);
             String customerGrade = URLEncoder.encode("GOLD", ENC);
-            HttpGet httpGet = new HttpGet("http://localhost:8080/app-portal/api/service.json?s=" + sessionId
-                    + "&service=sample_CustomerService"
-                    + "&method=createCustomer"
-                    + "&param0=" + customerName
-                    + "&param1=" + customerEmail
-                    + "&param2=" + customerGrade);
 
-            System.out.println("Executing request " + httpGet.getRequestLine());
+            HttpGet get = new HttpGet("http://localhost:8080/app/rest/v2/services/sample_CustomerService/createCustomer?"
+                    + "name=" + customerName
+                    + "&email=" + customerEmail
+                    + "&grade=" + customerGrade);
+            get.setHeader("Authorization", "Bearer " + accessToken);
 
-            String customerId = httpclient.execute(httpGet, new StringResponseHandler());
+            System.out.println("Executing request " + get.getRequestLine());
+
+            String customerId = httpclient.execute(get, new StringResponseHandler());
             System.out.println("Created Customer: " + customerId);
         }
-    }
-
-    private String readResource(String name) throws IOException {
-        InputStream is = getClass().getResourceAsStream(name);
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = is.read(buffer)) != -1) {
-            os.write(buffer, 0, length);
-        }
-        return new String(os.toByteArray(), ENC);
     }
 
     private static class StringResponseHandler implements ResponseHandler<String> {
