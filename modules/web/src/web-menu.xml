@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
     <menu id="application"
           insertBefore="administration">

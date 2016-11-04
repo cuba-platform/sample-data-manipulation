@@ -18,11 +18,15 @@ package com.company.sample.gui.customer;
 
 import com.company.sample.entity.Customer;
 import com.company.sample.entity.CustomerGrade;
+import com.company.sample.entity.Discount;
+import com.company.sample.entity.ProductType;
+import com.company.sample.gui.product_type.ProductTypeDialog;
 import com.company.sample.service.CustomerService;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
@@ -51,6 +55,7 @@ public class CustomerBrowse extends AbstractLookup {
 
     @Inject
     private DataManager dataManager;
+
     @Inject
     private Metadata metadata;
 
@@ -132,5 +137,42 @@ public class CustomerBrowse extends AbstractLookup {
 
     public void onCancelBtnClick(Component source) {
         fieldsBox.setVisible(false);
+    }
+
+    public void onShowDiscountBtnClick() {
+        Customer customer = customersDs.getItem();
+        if (customer == null) {
+            showNotification("Select a customer", NotificationType.HUMANIZED);
+            return;
+        }
+        // Open ProductType selection dialog
+        ProductTypeDialog productTypeDialog = (ProductTypeDialog) openWindow(
+                "product-type-dialog", WindowManager.OpenType.DIALOG);
+        // Add listener which will be invoked when the dialog is closed with Window.COMMIT_ACTION_ID
+        productTypeDialog.addCloseWithCommitListener(() -> {
+            Double discount;
+            ProductType productType = productTypeDialog.getProductType();
+            if (productTypeDialog.getOption().equals(ProductTypeDialog.IN_SCREEN)) {
+                discount = calculateDiscountInScreen(customer, productType);
+            } else {
+                discount = calculateDiscountInService(customer, productType);
+            }
+            showNotification("Discount is " + discount, NotificationType.HUMANIZED);
+        });
+    }
+
+    private Double calculateDiscountInScreen(Customer customer, ProductType productType) {
+        List<Discount> discounts = dataManager.loadList(LoadContext.create(Discount.class).setQuery(
+                LoadContext.createQuery("select d from sample$Discount d where d.customerGrade = :grade and d.productType = :type")
+                        .setParameter("grade", customer.getGrade())
+                        .setParameter("type", productType)));
+        if (discounts.isEmpty())
+            return 0.0;
+        else
+            return discounts.get(0).getDiscount();
+    }
+
+    private Double calculateDiscountInService(Customer customer, ProductType productType) {
+        return customerService.getDiscount(customer.getGrade(), productType);
     }
 }

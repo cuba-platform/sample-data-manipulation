@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://productTypeCaption"
+        class="com.company.sample.gui.product_type.ProductTypeDialog"
+        messagesPack="com.company.sample.gui.product_type">
+    <dialogMode height="250"
+                modal="true"
+                width="300"/>
+    <layout expand="buttonsBox"
+            spacing="true">
+        <lookupField id="productTypeField"
+                     align="TOP_CENTER"
+                     caption="Product Type"/>
+        <optionsGroup id="optionsField"
+                      align="TOP_CENTER"/>
+        <hbox id="buttonsBox"
+              align="TOP_CENTER"
+              spacing="true">
+            <button caption="OK"
+                    invoke="onOk"/>
+            <button caption="Cancel"
+                    invoke="onCancel"/>
+        </hbox>
+    </layout>
+</window>

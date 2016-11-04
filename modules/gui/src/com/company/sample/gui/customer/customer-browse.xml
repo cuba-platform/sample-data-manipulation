@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://browseCaption"
         class="com.company.sample.gui.customer.CustomerBrowse"
@@ -77,6 +76,8 @@ order by e.name]]>
                         invoke="onDeleteAllBtnClick"/>
                 <button id="refreshBtn"
                         action="customersTable.refresh"/>
+                <button caption="Show Discount"
+                        invoke="onShowDiscountBtnClick"/>
             </buttonsPanel>
         </table>
     </layout>

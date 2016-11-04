@@ -16,3 +16,21 @@ create table SAMPLE_CUSTOMER (
     primary key (ID)
 )^
 -- end SAMPLE_CUSTOMER
+-- begin SAMPLE_DISCOUNT
+create table SAMPLE_DISCOUNT (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    CUSTOMER_GRADE integer,
+    PRODUCT_TYPE varchar(50),
+    DISCOUNT double precision,
+    --
+    primary key (ID)
+)^
+-- end SAMPLE_DISCOUNT

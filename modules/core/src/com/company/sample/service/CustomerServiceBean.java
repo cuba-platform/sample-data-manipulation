@@ -18,6 +18,7 @@ package com.company.sample.service;
 
 import com.company.sample.entity.Customer;
 import com.company.sample.entity.CustomerGrade;
+import com.company.sample.entity.ProductType;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
@@ -96,5 +97,21 @@ public class CustomerServiceBean implements CustomerService {
             query.executeUpdate();
             tx.commit();
         }
+    }
+
+    @Override
+    public Double getDiscount(CustomerGrade customerGrade, ProductType productType) {
+        Double value;
+        try (Transaction tx = persistence.createTransaction()) {
+            Query query = persistence.getEntityManager().createQuery(
+                    "select d.discount from sample$Discount d where d.customerGrade = :grade and d.productType = :type");
+            query.setParameter("grade", customerGrade);
+            query.setParameter("type", productType);
+            value = (Double) query.getFirstResult();
+            tx.commit();
+        }
+        if (value == null)
+            value = 0.0;
+        return value;
     }
 }

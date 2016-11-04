@@ -14,8 +14,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
     <screen id="sample$Customer.browse"
             template="com/company/sample/gui/customer/customer-browse.xml"/>
+    <screen id="product-type-dialog"
+            template="com/company/sample/gui/product_type/product-type-dialog.xml"/>
 </screen-config>
