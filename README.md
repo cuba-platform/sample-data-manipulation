@@ -1,6 +1,6 @@
 # Data Manipulation
 
-This example project outlines various ways of programmatic data manipulation in [CUBA](https://www.cuba-platform.com) applications.
+This example project outlines various ways of programmatic data manipulation in CUBA applications.
 
 - Programmatic creation, updating and deletion of entities on the middleware and on the client tier. See the following methods of the [CustomerBrowse](https://github.com/cuba-platform/sample-data-manipulation/blob/master/modules/gui/src/com/company/sample/gui/customer/CustomerBrowse.java) screen controller:
     - `onCreateInService()` - sends customer data to a middleware [service](https://github.com/cuba-platform/sample-data-manipulation/blob/master/modules/core/src/com/company/sample/service/CustomerServiceBean.java) method.
