@@ -36,13 +36,7 @@ cuba {
     tomcat {
         dir = "$project.rootDir/build/tomcat"
     }
-    ide {
-        copyright = '''Copyright (c) ${today.year} ${project.name}''' // Copyright Notice for IDEA project
-        classComment ='''/**
- * @author ${USER}
- */'''
-        
-    }
+    
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
