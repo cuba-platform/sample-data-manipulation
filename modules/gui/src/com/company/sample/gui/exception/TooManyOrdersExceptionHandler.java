@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2017 data-manipulation
- */
-
 package com.company.sample.gui.exception;
 
 import com.company.sample.exception.TooManyOrdersException;
