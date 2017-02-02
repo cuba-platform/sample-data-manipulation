@@ -20,4 +20,4 @@ This example project outlines various ways of programmatic data manipulation in 
     - The `RestClient.createCustomer()` method creates an entity by sending JSON to the standard REST API CRUD method.
     - The `RestClient.createCustomerViaService()` method creates an entity by sending its attributes to the middleware service.
 
-Based on CUBA Platform 6.3.5
+Based on CUBA Platform 6.4.0
