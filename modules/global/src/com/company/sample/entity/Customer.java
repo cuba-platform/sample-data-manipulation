@@ -1,12 +1,12 @@
 package com.company.sample.entity;
 
+import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.StandardEntity;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Column;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import com.haulmont.chile.core.annotations.NamePattern;
 import javax.persistence.UniqueConstraint;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 @NamePattern("%s|name")
 @Table(name = "SAMPLE_CUSTOMER", uniqueConstraints = {
@@ -33,7 +33,6 @@ public class Customer extends StandardEntity {
         return grade == null ? null : CustomerGrade.fromId(grade);
     }
 
-
     public void setName(String name) {
         this.name = name;
     }
@@ -49,6 +48,4 @@ public class Customer extends StandardEntity {
     public String getEmail() {
         return email;
     }
-
-
 }

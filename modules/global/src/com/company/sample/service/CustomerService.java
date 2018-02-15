@@ -1,6 +1,5 @@
 package com.company.sample.service;
 
-import com.company.sample.entity.Customer;
 import com.company.sample.entity.CustomerGrade;
 import com.company.sample.entity.ProductType;
 
