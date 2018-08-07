@@ -21,3 +21,6 @@ This example project outlines various ways of programmatic data manipulation in 
     - The `RestClient.createCustomerViaService()` method creates an entity by sending its attributes to the middleware service.
 
 Based on CUBA Platform 6.9.1
+
+## Issues
+Please use https://www.cuba-platform.com/discuss for discussion, support, and reporting problems coressponding to this sample.
